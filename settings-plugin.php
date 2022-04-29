@@ -69,6 +69,77 @@ if ( ! class_exists( 'Settings_Plugin' ) ) {
 		}
 
 		/**
+		 * Sanitizes input from dangerous attributes/characters.
+		 *
+		 * @param array $input
+		 *
+		 * @return array
+		 */
+		public function sanitize_input( $input ) {
+			$valid              = array();
+			$valid['full_name'] = preg_replace( '/[^a-zA-Z\s]/', '', $input['full_name'] );
+			$valid['full_name'] = trim( $valid['full_name'] );
+			if ( $valid['full_name'] !== $input['full_name'] ) {
+				add_settings_error(
+					'full_name',
+					'new_settings_error',
+					'Incorrect value entered! Please only input letters and spaces.'
+				);
+				$valid['full_name'] = '';
+			}
+
+			return $valid;
+		}
+
+		public function section_desc() {
+			echo '<p>Enter your settings here.</p>';
+		}
+
+		public function render_input( $args ) {
+			$option_name = $args['option_name'];
+			$id          = $args['label_for'];
+			$options     = get_option( $option_name );
+			$full_name   = $options[ $id ];
+			echo '
+			<input 
+				id="' . $full_name . '" 
+				name="' . $option_name . '[' . $id . ']" 
+				type="text" 
+				value="' . esc_attr( $full_name ) . '" 
+				class="regular-text" 
+			>';
+		}
+
+		/**
+		 * Register settings, sections and custom fields.
+		 *
+		 * @return void
+		 */
+		public function register_fields() {
+			$option_name = 'settings_plugin_options';
+			register_setting( $option_name, $option_name, array( $this, 'sanitize_input' ) );
+
+			add_settings_section(
+				'new_settings_main',
+				'Available Settings',
+				array( $this, 'section_desc' ),
+				'new_settings_plugin'
+			);
+
+			add_settings_field(
+				'full_name',
+				'Your full name',
+				array( $this, 'render_input' ),
+				'new_settings_plugin',
+				'new_settings_main',
+				array(
+					'label_for'   => 'full_name',
+					'option_name' => $option_name
+				)
+			);
+		}
+
+		/**
 		 * Get new-settings template files.
 		 *
 		 * @return void
