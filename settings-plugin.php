@@ -45,7 +45,7 @@ if ( ! class_exists( 'Settings_Plugin' ) ) {
 		private $plugin;
 		private $plugin_path;
 
-		function __construct() {
+		public function __construct() {
 			$this->plugin      = plugin_basename( __FILE__ );
 			$this->plugin_path = plugin_dir_path( __FILE__ );
 		}
@@ -55,16 +55,16 @@ if ( ! class_exists( 'Settings_Plugin' ) ) {
 		 *
 		 * @return void
 		 */
-		function register() {
+		public function register() {
 			add_action( 'admin_menu', array( $this, 'add_settings_menu' ) );
 			add_filter( "plugin_action_links_$this->plugin", array( $this, 'settings_link' ) );
 		}
 
-		function activate() {
+		public function activate() {
 			flush_rewrite_rules();
 		}
 
-		function deactivate() {
+		public function deactivate() {
 			flush_rewrite_rules();
 		}
 
@@ -99,8 +99,8 @@ if ( ! class_exists( 'Settings_Plugin' ) ) {
 		 *
 		 * @return array        Modified global links.
 		 */
-		function settings_link( $links ) {
-			$settings_link = '<a href="plugins.php">Settings</a>';
+		public function settings_link( $links ) {
+			$settings_link = '<a href="admin.php?page=new_settings_plugin">Settings</a>';
 			array_push( $links, $settings_link );
 
 			return $links;
