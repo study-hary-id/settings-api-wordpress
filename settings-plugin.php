@@ -63,6 +63,15 @@ if ( ! class_exists( 'Settings_Plugin' ) ) {
 
 		public function activate() {
 			flush_rewrite_rules();
+
+			if ( get_option( 'settings_plugin_options' ) ) {
+				return;
+			}
+
+			update_option(
+				'settings_plugin_options',
+				array( 'full_name' => '' )
+			);
 		}
 
 		public function deactivate() {
