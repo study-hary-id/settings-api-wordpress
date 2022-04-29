@@ -43,9 +43,11 @@ if ( ! class_exists( 'Settings_Plugin' ) ) {
 	 */
 	class Settings_Plugin {
 		private $plugin;
+		private $plugin_path;
 
 		function __construct() {
-			$this->plugin = plugin_basename( __FILE__ );
+			$this->plugin      = plugin_basename( __FILE__ );
+			$this->plugin_path = plugin_dir_path( __FILE__ );
 		}
 
 		/**
@@ -54,6 +56,7 @@ if ( ! class_exists( 'Settings_Plugin' ) ) {
 		 * @return void
 		 */
 		function register() {
+			add_action( 'admin_menu', array( $this, 'add_settings_menu' ) );
 			add_filter( "plugin_action_links_$this->plugin", array( $this, 'settings_link' ) );
 		}
 
@@ -63,6 +66,30 @@ if ( ! class_exists( 'Settings_Plugin' ) ) {
 
 		function deactivate() {
 			flush_rewrite_rules();
+		}
+
+		/**
+		 * Get new-settings template files.
+		 *
+		 * @return void
+		 */
+		public function get_template() {
+			require_once $this->plugin_path . 'templates/new-settings.php';
+		}
+
+		/**
+		 * Add new menu to WordPress settings.
+		 *
+		 * @return void
+		 */
+		public function add_settings_menu() {
+			add_options_page(
+				'New Settings',
+				'New Settings',
+				'manage_options',
+				'new_settings_plugin',
+				array( $this, 'get_template' )
+			);
 		}
 
 		/**
