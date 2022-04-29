@@ -87,7 +87,9 @@ if ( ! class_exists( 'Settings_Plugin' ) ) {
 		 */
 		public function sanitize_input( $input ) {
 			$valid              = array();
-			$valid['full_name'] = preg_replace( '/[^a-zA-Z\s]/', '', $input['full_name'] );
+			$valid['full_name'] = preg_replace(
+				'/[^a-zA-Z\s]/', '', $input['full_name']
+			);
 			$valid['full_name'] = trim( $valid['full_name'] );
 			if ( $valid['full_name'] !== $input['full_name'] ) {
 				add_settings_error(
@@ -107,11 +109,10 @@ if ( ! class_exists( 'Settings_Plugin' ) ) {
 
 		public function render_input( $args ) {
 			$option_name = $args['option_name'];
-			$id          = $args['label_for'];
 			$options     = get_option( $option_name );
-			$full_name   = $options[ $id ];
-			echo '
-			<input 
+			$id          = $args['label_for'];
+			$full_name = $options[ $id ];
+			echo '<input 
 				id="' . $full_name . '" 
 				name="' . $option_name . '[' . $id . ']" 
 				type="text" 
