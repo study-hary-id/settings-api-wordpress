@@ -172,7 +172,7 @@ if ( ! class_exists( 'Settings_Plugin' ) ) {
 		 * @return array        Modified global links.
 		 */
 		public function settings_link( $links ) {
-			$settings_link = '<a href="admin.php?page=new_settings_plugin">Settings</a>';
+			$settings_link = '<a href="options-general.php?page=new_settings_plugin">Settings</a>';
 			array_push( $links, $settings_link );
 
 			return $links;
