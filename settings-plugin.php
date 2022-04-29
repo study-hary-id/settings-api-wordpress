@@ -56,6 +56,7 @@ if ( ! class_exists( 'Settings_Plugin' ) ) {
 		 * @return void
 		 */
 		public function register() {
+			add_action( 'admin_init', array( $this, 'register_fields' ) );
 			add_action( 'admin_menu', array( $this, 'add_settings_menu' ) );
 			add_filter( "plugin_action_links_$this->plugin", array( $this, 'settings_link' ) );
 		}
